@@ -34,3 +34,6 @@ dist-ssr
 # Lovable
 .lovable/
 .workspace/
+
+# Vercel CLI
+.vercel/

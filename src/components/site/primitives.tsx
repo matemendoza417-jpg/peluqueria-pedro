@@ -95,6 +95,7 @@ export function Reveal({
 }) {
   return (
     <motion.div
+      data-reveal
       className={className}
       variants={revealVariants[mode]}
       initial="hidden"
@@ -129,6 +130,7 @@ export function SplitText({
 
   return (
     <MotionTag
+      data-split
       className={cn("inline-block", className)}
       initial="hidden"
       whileInView="show"
@@ -143,6 +145,7 @@ export function SplitText({
           aria-hidden
         >
           <motion.span
+            data-split
             className="inline-block"
             variants={{
               hidden: { y: "110%", opacity: 0, filter: "blur(8px)" },

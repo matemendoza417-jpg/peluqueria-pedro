@@ -11,6 +11,10 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { negocio } from "@/lib/business";
+
+/** Si el JS no corre, nada de lo que se anima puede quedarse en opacity:0. */
+const noScriptCss = `[data-reveal],[data-split]{opacity:1!important;transform:none!important;clip-path:none!important}`;
 
 function NotFoundComponent() {
   return (
@@ -77,14 +81,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Peluquería Pedro | Barbería premium en Alcoy" },
+      { title: `${negocio.nombre} — Peluquería en ${negocio.barrio}, ${negocio.ciudad}` },
       {
         name: "description",
-        content:
-          "Barbería y peluquería masculina en Alcoy. Cortes de precisión, barba con navaja y cita previa por WhatsApp.",
+        content: `Peluquería de barrio en ${negocio.direccionCompleta}. Corte de pelo y arreglo de barba. Reserva por teléfono: ${negocio.telefono}.`,
       },
-      { name: "author", content: "Peluquería Pedro" },
-      { property: "og:site_name", content: "Peluquería Pedro" },
+      { name: "author", content: negocio.nombre },
+      { property: "og:site_name", content: negocio.nombre },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#07101a" },
@@ -112,9 +115,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <head>
         <HeadContent />
+        <noscript>
+          <style dangerouslySetInnerHTML={{ __html: noScriptCss }} />
+        </noscript>
       </head>
       <body>
         {children}

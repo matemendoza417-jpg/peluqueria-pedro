@@ -1,11 +1,13 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { negocio } from "@/lib/business";
 import { Magnetic } from "./primitives";
 
 const links = [
   { label: "Servicios", href: "#servicios" },
   { label: "Filosofía", href: "#filosofia" },
+  { label: "Reseñas", href: "#resenas" },
   { label: "El local", href: "#local" },
   { label: "Contacto", href: "#contacto" },
 ];
@@ -69,13 +71,13 @@ export function Navbar() {
           <div className="flex shrink-0 items-center gap-2">
             <Magnetic strength={0.25} className="hidden sm:inline-block">
               <a
-                href="#contacto"
+                href={negocio.telHref}
                 data-cursor="cta"
-                data-cursor-label="Reservar"
-                className="group relative inline-flex items-center overflow-hidden rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground transition-shadow duration-500 hover:shadow-[var(--shadow-glow)]"
+                data-cursor-label="Llamar"
+                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground transition-shadow duration-500 hover:shadow-[var(--shadow-glow)]"
               >
                 <span className="pointer-events-none absolute inset-0 -translate-x-full bg-[linear-gradient(100deg,transparent,oklch(1_0_0/40%),transparent)] transition-transform duration-1000 group-hover:translate-x-full" />
-                <span className="relative">Pedir cita</span>
+                <span className="relative">{negocio.telefono}</span>
               </a>
             </Magnetic>
             <button

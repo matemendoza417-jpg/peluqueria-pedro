@@ -1,2 +1,3 @@
 User-agent: *
 Allow: /
+Sitemap: https://peluqueria-pedro-web-v2.vercel.app/sitemap.xml

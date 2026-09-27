@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 const silk = [0.16, 1, 0.3, 1] as const;
 
-export function Loader({ onDone }: { onDone: () => void }) {
+export function Loader() {
   const [progress, setProgress] = useState(0);
   const [visible, setVisible] = useState(true);
 
@@ -16,15 +16,12 @@ export function Loader({ onDone }: { onDone: () => void }) {
       setProgress(Math.round(100 * (1 - Math.pow(1 - p, 3))));
       if (p < 1) raf = requestAnimationFrame(tick);
       else {
-        setTimeout(() => {
-          setVisible(false);
-          onDone();
-        }, 420);
+        setTimeout(() => setVisible(false), 420);
       }
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [onDone]);
+  }, []);
 
   return (
     <AnimatePresence>

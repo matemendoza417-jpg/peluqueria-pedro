@@ -140,6 +140,14 @@
     overflow-x: hidden;
   }
 
+  /* La barra de contacto fija (lg:hidden) ocupa ~4.5rem: reservamos el hueco
+     para que no tape el final del contenido. */
+  @media (max-width: 1023px) {
+    body {
+      padding-bottom: 4.75rem;
+    }
+  }
+
   ::selection {
     background: oklch(0.63 0.084 210 / 30%);
     color: var(--color-foreground);
@@ -160,6 +168,38 @@
       animation-duration: 0.001ms !important;
       transition-duration: 0.001ms !important;
     }
+  }
+}
+
+/* ============================================================
+   ACCESIBILIDAD DE LAS ANIMACIONES (WCAG 2.3.3)
+   Reveal y SplitText arrancan en opacity:0 y solo se ven si un
+   IntersectionObserver dispara. Con prefers-reduced-motion, sin JS
+   o con un fallo de red, ese contenido tiene que ser visible igual.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-split] {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+  [data-reveal] *,
+  [data-split] * {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .orb {
+    animation: none !important;
+  }
+  .grain::after {
+    display: none;
+  }
+  html {
+    scroll-behavior: auto;
   }
 }
 

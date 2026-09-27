@@ -1,21 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 import { Atmosphere, Cursor, ScrollProgress } from "@/components/site/atmosphere";
 import { Hero } from "@/components/site/hero";
 import { Loader } from "@/components/site/loader";
 import { Navbar } from "@/components/site/navbar";
+import { ContactBar } from "@/components/site/contact-bar";
 import {
   Contacto,
   Filosofia,
   Footer,
   Local,
-  MobileActionBar,
+  Resenas,
   Servicios,
 } from "@/components/site/sections";
+import { negocio } from "@/lib/business";
 
-const title = "Peluquería Pedro | Barbería premium en Alcoy";
-const description =
-  "Barbería y peluquería masculina en Alcoy: cortes de precisión, arreglo de barba con navaja y ritual completo. Pide cita por teléfono o WhatsApp.";
+const title = `${negocio.nombre} — Peluquería en ${negocio.barrio}, ${negocio.ciudad}`;
+const description = `Peluquería de barrio en ${negocio.direccionCompleta}. Corte de pelo y arreglo de barba. Reserva por teléfono: ${negocio.telefono}.`;
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -36,27 +36,31 @@ export const Route = createFileRoute("/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "HairSalon",
-          name: "Peluquería Pedro",
+          name: negocio.nombre,
           description,
-          image: "/favicon.ico",
-          telephone: "+34965000000",
-          priceRange: "€€",
+          url: "https://peluqueria-pedro-web-v2.vercel.app/",
+          image: "https://peluqueria-pedro-web-v2.vercel.app/favicon.ico",
+          telephone: negocio.telHref.replace("tel:", ""),
+          founder: { "@type": "Person", name: negocio.titular },
           address: {
             "@type": "PostalAddress",
-            streetAddress: "Carrer Sant Nicolau 12",
-            addressLocality: "Alcoy",
-            addressRegion: "Alicante",
-            postalCode: "03801",
+            streetAddress: negocio.direccion,
+            addressLocality: negocio.ciudad,
+            addressRegion: negocio.provincia,
+            postalCode: negocio.cp,
             addressCountry: "ES",
           },
-          openingHoursSpecification: [
-            {
-              "@type": "OpeningHoursSpecification",
-              dayOfWeek: ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-              opens: "09:30",
-              closes: "20:30",
-            },
-          ],
+          geo: {
+            "@type": "GeoCoordinates",
+            latitude: 38.7033176,
+            longitude: -0.4776347,
+          },
+          areaServed: { "@type": "City", name: negocio.ciudad },
+          // openingHoursSpecification OMITIDO: no hay horario verificado
+          // (única fuente: ficha de Yelp sin reclamar). Ver _PATRONES.md §0.
+          // sameAs OMITIDO: el negocio no tiene redes sociales.
+          // aggregateRating OMITIDO: 4,8 coincide, pero el nº de reseñas
+          // discrepa (8 · 21 · 22) y schema.org exige reviewCount coherente.
         }),
       },
     ],
@@ -64,26 +68,26 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [ready, setReady] = useState(false);
-
+  // El Loader ya es una capa fija opaca que tapa la página, así que el contenido
+  // NO se pone en opacity:0: si el JS falla, el texto sigue siendo visible
+  // (requisito de accesibilidad de animaciones).
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background">
-      <Loader onDone={() => setReady(true)} />
+      <Loader />
       <Cursor />
       <ScrollProgress />
       <Atmosphere />
       <Navbar />
-      <main
-        className={`relative z-10 transition-opacity duration-1000 ${ready ? "opacity-100" : "opacity-0"}`}
-      >
+      <main className="relative z-10">
         <Hero />
         <Servicios />
         <Filosofia />
+        <Resenas />
         <Local />
         <Contacto />
       </main>
       <Footer />
-      <MobileActionBar />
+      <ContactBar />
     </div>
   );
 }
